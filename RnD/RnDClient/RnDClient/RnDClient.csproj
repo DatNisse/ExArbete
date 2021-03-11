@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{81898816-EA4D-4082-AEEE-DA5B416BDFCC}</ProjectGuid>
+    <ProjectGuid>{1C929CD5-6FB2-48E3-9EAD-C23AB9ECAC4B}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>RnDServer</RootNamespace>
-    <AssemblyName>RnDServer</AssemblyName>
+    <RootNamespace>RnDClient</RootNamespace>
+    <AssemblyName>RnDClient</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -36,9 +36,6 @@
     <Reference Include="LiteNetLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\LiteNetLib.0.9.4\lib\net35\LiteNetLib.dll</HintPath>
     </Reference>
-    <Reference Include="Open.Nat, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f22a6a4582336c76, processorArchitecture=MSIL">
-      <HintPath>..\packages\Open.NAT.2.1.0.0\lib\net45\Open.Nat.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -49,32 +46,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NETLIBTEST.cs" />
-    <Compile Include="OPENNAT.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="STUN\Client\STUN_Client.cs" />
-    <Compile Include="STUN\Client\STUN_NetType.cs" />
-    <Compile Include="STUN\Client\STUN_Result.cs" />
-    <Compile Include="STUN\Message\STUN_Message.cs" />
-    <Compile Include="STUN\Message\STUN_MessageType.cs" />
-    <Compile Include="STUN\Message\STUN_t_ChangedRequest.cs" />
-    <Compile Include="STUN\Message\STUN_t_ErrorCode.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <COMReference Include="UPNPLib">
-      <Guid>{DB3442A7-A2E9-4A59-9CB5-F5C1A5D901E5}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

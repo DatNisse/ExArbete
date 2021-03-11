@@ -14,18 +14,20 @@ namespace RnDServer
 {
     class Program
     {
-        /*
+        
         static async Task Main(string[] args)
         {
             Console.WriteLine("start");
-            OPENNAT oPENNAT = new OPENNAT();
-            await oPENNAT.func1Async();
+            //OPENNAT oPENNAT = new OPENNAT();
+            //await oPENNAT.func1Async();
             //TCPer();
             //NatDiscover();
+            NETLIBTEST nETLIBTEST = new NETLIBTEST();
+            nETLIBTEST.ServerSide();
             Console.ReadLine();
         }
-        */
-
+        
+        /*
         static void Main(string[] args)
         {
             Console.WriteLine("Hello world!");
@@ -86,6 +88,7 @@ namespace RnDServer
             Console.WriteLine("ReadKey");
             Console.ReadKey();
         }
+        */
 
         //public const int upnp_port = 3075;
 
