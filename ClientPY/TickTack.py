@@ -44,7 +44,7 @@ while gamestart:
 
 
 print("opponent name: " + message.playerId)
-if message.MoveNumber == -1:
+if message.move_number == -1:
     playerTurn = True
 
 input("waiting for you <3")
@@ -190,6 +190,7 @@ while game:
         pb = message.SerializeToString()
         responseBytes = bytes(pb)
         UDPClientSocket.sendto(responseBytes, serverAddressPort)
+        playerTurn = False
 
     else:
         print("waiting for opponent to make a move")
@@ -198,12 +199,12 @@ while game:
         message.ParseFromString(msgFromServer[0])
         print(message)
         if player == 1:
-            board_boxes[int(message.Move)].draw_cross()
+            board_boxes[int(message.move)].draw_cross()
             win_state = check_board(player)
             player = 2
             moves += 1
         else:
-            board_boxes[int(message.Move)].draw_circle()
+            board_boxes[int(message.move)].draw_circle()
             win_state = check_board(player)
             player = 1
             moves += 1

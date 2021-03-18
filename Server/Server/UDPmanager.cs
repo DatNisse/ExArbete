@@ -89,11 +89,27 @@ namespace Server
                             clients.Add(new Client(RemoteIpEndPoint, message.PlayerId));
                             SendMessage(RemoteIpEndPoint, protomanager.GreetMessage(message.PlayerId));
                         }
+                        foreach (Client client in clients)
+                        {
+                            if (!client.ClientEndPoint.Port.Equals(RemoteIpEndPoint.Port) && !client.ClientEndPoint.Address.Equals(RemoteIpEndPoint.Address))
+                            {
+                                if (!client.isActive)
+                                {
+                                    //new opponent found!
+                                    games.Add(new Game(RemoteIpEndPoint, message.PlayerId, client.ClientEndPoint, client.ClientId));
+                                    SendMessage(RemoteIpEndPoint, protomanager.NewGameP1(client.ClientId));
+                                    SendMessage(client.ClientEndPoint, protomanager.NewGameP2(message.PlayerId));
+                                }
+                            }
+                        }
                     }
                     //player is known and active in a game
                     else if (message.IsActive)
                     {
                         Console.WriteLine("Active player messaged");
+
+                        Console.WriteLine("Message was: playerID= {0}, move_number= {1}, move= {2}, isGreet= {3}, isActive= {4}, isGameover= {5}", message.PlayerId, message.MoveNumber, message.Move, message.IsGreet, message.IsActive, message.IsGameover);
+
                         //check which game
                         foreach (Game game in games)
                         {
@@ -167,7 +183,7 @@ namespace Server
                 }
             }
         }
-
+        
         private void SendMessage(IPEndPoint targetEp, byte[] b_msg)
         {
             recivingUdpClient.Connect(targetEp);
