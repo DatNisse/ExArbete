@@ -6,14 +6,14 @@ import GameMessage_pb2
 
 print("starting UDP punch")
 ip = input("please input serverIP")
-
+PlayerName = input("please input your player name")
 serverAddressPort = (ip, 11000)
 bufferSize = 1024
 UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 
 print("Sending byte")
 message = GameMessage_pb2.GameMessage()
-message.playerId = "testplayer"
+message.playerId = PlayerName
 message.isActive = False
 message.isGreet = True
 
@@ -29,14 +29,15 @@ msgFromServer = UDPClientSocket.recvfrom(bufferSize)
 
 print(msgFromServer)
 
+
 print("Waiting for opponent...")
 
 gamestart = True
-time.sleep(1)
+playerTurn = False
 while gamestart:
     msgFromServer = UDPClientSocket.recvfrom(bufferSize)
     print("Message from server")
-    message.ParseFromString(msgFromServer)
+    message.ParseFromString(msgFromServer[0])
     print(message)
     if message.move == "newgame":
         gamestart = False
@@ -147,41 +148,81 @@ for obj in board_boxes:
     print(obj.ypos)
 
 while game:
-
+    win_state = False
     if playerTurn:
-
-        win_state = False
         mouse = win.getMouse()
         print(mouse)
+        boxnum = 0
         for box in board_boxes:
             if box.xpos[0] < mouse.x < box.xpos[1] and box.ypos[0] < mouse.y < box.ypos[1] and box.is_empty:
                 if player == 1:
                     box.draw_cross()
                     win_state = check_board(player)
+                    message = GameMessage_pb2.GameMessage()
+                    message.playerId = PlayerName
+                    message.move = str(boxnum)
+                    message.move_number = moves
+                    message.isActive = True
+                    message.isGreet = False
+                    if win_state:
+                        message.isGameover = True
+                    else:
+                        message.isGameover = win_state
                     player = 2
                     moves += 1
                 else:
                     box.draw_circle()
                     win_state = check_board(player)
+                    message = GameMessage_pb2.GameMessage()
+                    message.playerId = PlayerName
+                    message.move = str(boxnum)
+                    message.move_number = moves
+                    message.isActive = True
+                    message.isGreet = False
+                    if win_state:
+                        message.isGameover = True
+                    else:
+                        message.isGameover = win_state
                     player = 1
                     moves += 1
 
-        if win_state:
-            label = Text(Point(winDim / 2, winDim / 2), win_state)
+            boxnum = boxnum + 1
+        pb = message.SerializeToString()
+        responseBytes = bytes(pb)
+        UDPClientSocket.sendto(responseBytes, serverAddressPort)
+
+    else:
+        print("waiting for opponent to make a move")
+        msgFromServer = UDPClientSocket.recvfrom(bufferSize)
+        print("received move from opponent")
+        message.ParseFromString(msgFromServer[0])
+        print(message)
+        if player == 1:
+            board_boxes[int(message.Move)].draw_cross()
+            win_state = check_board(player)
+            player = 2
+            moves += 1
+        else:
+            board_boxes[int(message.Move)].draw_circle()
+            win_state = check_board(player)
+            player = 1
+            moves += 1
+        playerTurn = True
+
+    if win_state:
+        label = Text(Point(winDim / 2, winDim / 2), win_state)
+        label.setSize(36)
+        label.setTextColor('red')
+        label.draw(win)
+        win.getMouse()
+        game = False
+    else:
+        if moves == 9:
+            label = Text(Point(winDim / 2, winDim / 2), "DRAW!")
             label.setSize(36)
-            label.setTextColor('red')
             label.draw(win)
             win.getMouse()
             game = False
-        else:
-            if moves == 9:
-                label = Text(Point(winDim / 2, winDim / 2), "DRAW!")
-                label.setSize(36)
-                label.draw(win)
-                win.getMouse()
-                game = False
-
-
 win.close()
 
 

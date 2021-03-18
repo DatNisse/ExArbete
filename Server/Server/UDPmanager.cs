@@ -104,12 +104,40 @@ namespace Server
                                 if ((game.GetP1().ClientEndPoint.Port.Equals(RemoteIpEndPoint.Port) && game.GetP1().ClientEndPoint.Address.Equals(RemoteIpEndPoint.Address)))
                                 {
                                     SendMessage(game.GetP2().ClientEndPoint, recivingBytes);
-                                    game.isGameover = message.IsGameover; //if gameover mark game as done
+                                    if (message.IsGameover)
+                                    {
+                                        foreach (Client client in clients)
+                                        {
+                                            if (game.GetP2().ClientEndPoint.Port.Equals(client.ClientEndPoint.Port) && game.GetP2().ClientEndPoint.Address.Equals(client.ClientEndPoint.Address))
+                                            {
+                                                client.isActive = false; //marks player in client list as not in game
+                                            }
+                                            if (game.GetP1().ClientEndPoint.Port.Equals(client.ClientEndPoint.Port) && game.GetP1().ClientEndPoint.Address.Equals(client.ClientEndPoint.Address))
+                                            {
+                                                client.isActive = false; //marks player in client list as not in game
+                                            }
+                                        }
+                                        game.isGameover = message.IsGameover; //if gameover mark game as done
+                                    }
                                 }
                                 else if (game.GetP2().ClientEndPoint.Port.Equals(RemoteIpEndPoint.Port) && game.GetP2().ClientEndPoint.Address.Equals(RemoteIpEndPoint.Address))
                                 {
                                     SendMessage(game.GetP1().ClientEndPoint, recivingBytes);
-                                    game.isGameover = message.IsGameover; //if gameover mark game as done
+                                    if (message.IsGameover)
+                                    {
+                                        foreach (Client client in clients)
+                                        {
+                                            if (game.GetP2().ClientEndPoint.Port.Equals(client.ClientEndPoint.Port) && game.GetP2().ClientEndPoint.Address.Equals(client.ClientEndPoint.Address))
+                                            {
+                                                client.isActive = false; //marks player in client list as not in game
+                                            }
+                                            if (game.GetP1().ClientEndPoint.Port.Equals(client.ClientEndPoint.Port) && game.GetP1().ClientEndPoint.Address.Equals(client.ClientEndPoint.Address))
+                                            {
+                                                client.isActive = false; //marks player in client list as not in game
+                                            }
+                                        }
+                                        game.isGameover = message.IsGameover; //if gameover mark game as done
+                                    }
                                 }
                             }
                         }

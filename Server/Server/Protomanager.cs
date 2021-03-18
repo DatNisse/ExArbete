@@ -28,7 +28,7 @@ namespace Server
         }
         public byte[] GreetMessage(string playerId)
         {
-            return new GameMessage { IsGreet = true, Move = "", MoveNumber = 0, PlayerId = playerId }.ToByteArray();            
+            return new GameMessage { IsGreet = true, Move = "Greetings player", MoveNumber = 0, PlayerId = playerId }.ToByteArray();            
         }
         public byte[] NewGameP1(string playerId)
         {
