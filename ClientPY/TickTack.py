@@ -89,7 +89,7 @@ board_boxes = []
 #box = Box([30, 70], [30, 70])
 #board_boxes.append(box)
 
-print("hello world")
+#print("hello world")
 print(board_boxes)
 
 
