@@ -146,51 +146,53 @@ draw_board()
 for obj in board_boxes:
     print(obj.xpos)
     print(obj.ypos)
-
+legalmove = False
 while game:
     win_state = False
     if playerTurn:
-        mouse = win.getMouse()
-        print(mouse)
-        boxnum = 0
-        for box in board_boxes:
-            if box.xpos[0] < mouse.x < box.xpos[1] and box.ypos[0] < mouse.y < box.ypos[1] and box.is_empty:
-                if player == 1:
-                    box.draw_cross()
-                    win_state = check_board(player)
-                    message = GameMessage_pb2.GameMessage()
-                    message.playerId = PlayerName
-                    message.move = str(boxnum)
-                    message.move_number = moves
-                    message.isActive = True
-                    message.isGreet = False
-                    if win_state:
-                        message.isGameover = True
+        while legalmove:
+            mouse = win.getMouse()
+            print(mouse)
+            boxnum = 0
+            for box in board_boxes:
+                if box.xpos[0] < mouse.x < box.xpos[1] and box.ypos[0] < mouse.y < box.ypos[1] and box.is_empty:
+                    legalmove = True
+                    if player == 1:
+                        box.draw_cross()
+                        win_state = check_board(player)
+                        message = GameMessage_pb2.GameMessage()
+                        message.playerId = PlayerName
+                        message.move = str(boxnum)
+                        message.move_number = moves
+                        message.isActive = True
+                        message.isGreet = False
+                        if win_state:
+                            message.isGameover = True
+                        else:
+                            message.isGameover = win_state
+                        player = 2
+                        moves += 1
                     else:
-                        message.isGameover = win_state
-                    player = 2
-                    moves += 1
-                else:
-                    box.draw_circle()
-                    win_state = check_board(player)
-                    message = GameMessage_pb2.GameMessage()
-                    message.playerId = PlayerName
-                    message.move = str(boxnum)
-                    message.move_number = moves
-                    message.isActive = True
-                    message.isGreet = False
-                    if win_state:
-                        message.isGameover = True
-                    else:
-                        message.isGameover = win_state
-                    player = 1
-                    moves += 1
+                        box.draw_circle()
+                        win_state = check_board(player)
+                        message = GameMessage_pb2.GameMessage()
+                        message.playerId = PlayerName
+                        message.move = str(boxnum)
+                        message.move_number = moves
+                        message.isActive = True
+                        message.isGreet = False
+                        if win_state:
+                            message.isGameover = True
+                        else:
+                            message.isGameover = win_state
+                        player = 1
+                        moves += 1
 
-            boxnum = boxnum + 1
-        pb = message.SerializeToString()
-        responseBytes = bytes(pb)
-        UDPClientSocket.sendto(responseBytes, serverAddressPort)
-        playerTurn = False
+                boxnum = boxnum + 1
+            pb = message.SerializeToString()
+            responseBytes = bytes(pb)
+            UDPClientSocket.sendto(responseBytes, serverAddressPort)
+            playerTurn = False
 
     else:
         print("waiting for opponent to make a move")
