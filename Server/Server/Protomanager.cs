@@ -30,5 +30,13 @@ namespace Server
         {
             return new GameMessage { IsGreet = true, Move = "", MoveNumber = 0, PlayerId = playerId }.ToByteArray();            
         }
+        public byte[] NewGameP1(string playerId)
+        {
+            return new GameMessage { IsGreet = true, Move = "newgame", MoveNumber = -1, PlayerId = playerId }.ToByteArray();
+        }
+        public byte[] NewGameP2(string playerId)
+        {
+            return new GameMessage { IsGreet = true, Move = "newgame", MoveNumber = 0, PlayerId = playerId }.ToByteArray();
+        }
     }
 }

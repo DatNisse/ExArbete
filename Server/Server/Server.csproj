@@ -60,8 +60,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DBmanager.cs" />
+    <Compile Include="GameMessage.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Protomanager.cs" />
     <Compile Include="UDPmanager.cs" />
   </ItemGroup>
   <ItemGroup>
