@@ -8,6 +8,7 @@ using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Google.Protobuf;
 //using Mono.Nat;
 
 namespace RnDServer
@@ -22,9 +23,15 @@ namespace RnDServer
             //await oPENNAT.func1Async();
             //TCPer();
             //NatDiscover();
-            NETLIBTEST nETLIBTEST = new NETLIBTEST();
-            nETLIBTEST.ServerSide();
-            Console.ReadLine();
+            //NETLIBTEST nETLIBTEST = new NETLIBTEST();
+            //nETLIBTEST.ServerSide();
+            //Console.ReadLine();
+            
+
+            string externalIP = new WebClient().DownloadString("http://icanhazip.com");
+            Console.WriteLine("Serer global IP is: " + externalIP);
+            HolePunch holePunch = new HolePunch();
+            while (true) ;
         }
         
         /*

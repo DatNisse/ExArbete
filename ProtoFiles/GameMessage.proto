@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+message GameMessage {
+  string playerId = 1;
+  int32 move_number = 2;
+  string move = 3;
+  bool isGreet = 4;
+  bool isActive = 5;
+  bool isGameover = 6;
+}

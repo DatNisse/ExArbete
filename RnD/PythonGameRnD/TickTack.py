@@ -7,6 +7,7 @@ moves = 0
 winDim = 600
 win = GraphWin("Board", winDim, winDim)
 
+id = input("please input something")
 
 class Box:
     is_empty = True
