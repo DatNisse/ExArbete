@@ -4,6 +4,8 @@ import socket
 import time
 import GameMessage_pb2
 
+
+
 print("starting UDP punch")
 ip = input("please input serverIP")
 PlayerName = input("please input your player name")
@@ -35,6 +37,7 @@ print("Waiting for opponent...")
 gamestart = True
 playerTurn = False
 while gamestart:
+    print("Waiting for server message...")
     msgFromServer = UDPClientSocket.recvfrom(bufferSize)
     print("Message from server")
     message.ParseFromString(msgFromServer[0])
@@ -44,17 +47,19 @@ while gamestart:
 
 
 print("opponent name: " + message.playerId)
+print("move number: ")
+print(message.move_number)
 if message.move_number == -1:
     playerTurn = True
 
 input("waiting for you <3")
 
-
+winDim = 600
+win = GraphWin("Board", winDim, winDim)
 game = True
 player = 1
 moves = 0
-winDim = 600
-win = GraphWin("Board", winDim, winDim)
+
 
 
 
@@ -148,51 +153,58 @@ for obj in board_boxes:
     print(obj.ypos)
 legalmove = False
 while game:
+
     win_state = False
     if playerTurn:
-        while legalmove:
-            mouse = win.getMouse()
-            print(mouse)
-            boxnum = 0
-            for box in board_boxes:
-                if box.xpos[0] < mouse.x < box.xpos[1] and box.ypos[0] < mouse.y < box.ypos[1] and box.is_empty:
-                    legalmove = True
-                    if player == 1:
-                        box.draw_cross()
-                        win_state = check_board(player)
-                        message = GameMessage_pb2.GameMessage()
-                        message.playerId = PlayerName
-                        message.move = str(boxnum)
-                        message.move_number = moves
-                        message.isActive = True
-                        message.isGreet = False
-                        if win_state:
-                            message.isGameover = True
-                        else:
-                            message.isGameover = win_state
-                        player = 2
-                        moves += 1
-                    else:
-                        box.draw_circle()
-                        win_state = check_board(player)
-                        message = GameMessage_pb2.GameMessage()
-                        message.playerId = PlayerName
-                        message.move = str(boxnum)
-                        message.move_number = moves
-                        message.isActive = True
-                        message.isGreet = False
-                        if win_state:
-                            message.isGameover = True
-                        else:
-                            message.isGameover = win_state
-                        player = 1
-                        moves += 1
 
-                boxnum = boxnum + 1
+        mouse = win.getMouse()
+        print(mouse)
+        boxnum = 0
+        print("boxes: ")
+        for box in board_boxes:
+            print(str(boxnum) + str(box.is_empty))
+            if box.xpos[0] < mouse.x < box.xpos[1] and box.ypos[0] < mouse.y < box.ypos[1] and box.is_empty:
+                print("this box was clicked")
+                legalmove = True
+                if player == 1:
+                    box.draw_cross()
+                    win_state = check_board(player)
+                    message = GameMessage_pb2.GameMessage()
+                    message.playerId = PlayerName
+                    message.move = str(boxnum)
+                    message.move_number = moves
+                    message.isActive = True
+                    message.isGreet = False
+                    if win_state:
+                        message.isGameover = True
+                    else:
+                        message.isGameover = win_state
+                    player = 2
+                    moves += 1
+                else:
+                    box.draw_circle()
+                    win_state = check_board(player)
+                    message = GameMessage_pb2.GameMessage()
+                    message.playerId = PlayerName
+                    message.move = str(boxnum)
+                    message.move_number = moves
+                    message.isActive = True
+                    message.isGreet = False
+                    if win_state:
+                        message.isGameover = True
+                    else:
+                        message.isGameover = win_state
+                    player = 1
+                    moves += 1
+
+            boxnum = boxnum + 1
+
+        if legalmove:
             pb = message.SerializeToString()
             responseBytes = bytes(pb)
             UDPClientSocket.sendto(responseBytes, serverAddressPort)
             playerTurn = False
+            legalmove = False
 
     else:
         print("waiting for opponent to make a move")
@@ -226,6 +238,7 @@ while game:
             label.draw(win)
             win.getMouse()
             game = False
+
 win.close()
 
 
