@@ -212,6 +212,7 @@ while game:
         print("received move from opponent")
         message.ParseFromString(msgFromServer[0])
         print(message)
+
         if player == 1:
             board_boxes[int(message.move)].draw_cross()
             win_state = check_board(player)
