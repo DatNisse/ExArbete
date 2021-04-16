@@ -183,6 +183,10 @@ namespace Server
                         }
                         if (games[g].isGameover)
                         {
+                            /*
+                             * TODO: Call backend to store game in db here maybe?
+                             */
+
                             games.RemoveAt(g);
                         }
                         
